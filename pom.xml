@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+    <modelVersion>4.0.0</modelVersion>
+    <groupId> DSCB </groupId>
+	<artifactId>Spoty_Dist</artifactId>
+	<version>1.0.1</version>
+        <packaging>jar</packaging>
+	<name>Spoty_Dist</name>
+	<description>Analyze distribution of stained dots
+        </description>
+
+	<developers>
+            <developer>
+                <id>gaelle</id>
+                <name>Gaelle Letort</name>
+                <email>gaelle.letort@cnrs.fr</email>
+                <url></url>
+                <organization>DSCB, Institut Pasteur</organization>
+                <roles>
+                        <role>developer</role>
+                </roles>
+                <timezone>-1</timezone>
+            </developer>
+	</developers>
+
+	<properties>
+            <imagej.app.directory>/home/gaelle/Logiciel/Fiji/Fiji.app/</imagej.app.directory> 
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <main-class>Spoty_Dist.jar</main-class>
+	</properties>
+
+	<dependencies>
+            <dependency>
+                <groupId>ome</groupId>
+                <artifactId>bioformats_package</artifactId>
+                <version>5.2.2</version>
+            </dependency>      
+            <dependency>
+                <groupId>org.framagit.mcib3d</groupId>
+                <artifactId>mcib3d-core</artifactId>
+                <version>4.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>sc.fiji</groupId>
+                <artifactId>fiji-lib</artifactId>
+                <version>2.1.3-SNAPSHOT</version>
+                <type>jar</type>
+            </dependency>
+	<dependency>
+                <groupId>net.imagej</groupId>
+                <artifactId>ij</artifactId>
+                <version>1.53c</version>
+                <type>jar</type>
+            </dependency>
+
+	 <dependency>
+	  <groupId>net.haesleinhuepf</groupId>
+	  <artifactId>clij-clearcl</artifactId>
+	  <version>2.0.0.21</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>net.haesleinhuepf</groupId>
+	  <artifactId>clij2_</artifactId>
+	  <version>2.2.0.19</version>
+	  <type>jar</type>
+	 </dependency>
+	</dependencies>
+        <repositories>
+            <repository>
+            <id>scijava.public</id>
+            <url>https://maven.scijava.org/content/groups/public</url>
+            </repository>
+ 
+            <repository>
+                <id>ome</id>
+                <name>Bio-Formats Repo</name>
+                <url>http://artifacts.openmicroscopy.org/artifactory/maven</url>
+            </repository>
+          
+        </repositories>
+	<build>
+            <plugins>
+		<plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <showDeprecation>true</showDeprecation>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+		</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>copytoplugins</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <tasks>
+                                    <copy todir="${imagej.app.directory}/plugins/CIRB" file="target/${project.build.finalName}.jar"/>
+                                </tasks>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+	</build>
+
+</project>
