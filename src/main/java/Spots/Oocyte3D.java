@@ -151,9 +151,13 @@ public class Oocyte3D
         
         // Measure individual spots properties
         double spotsVolume = 0;
+        double spotsSurface = 0;
+        double spotsSphericity = 0;
         double dist = 0;
         int nspots = spots.getNbObjects();
         double[] vols = new double[nspots];
+        double[] surfaces = new double[nspots];
+        double[] sphericities = new double[nspots];
         double[] ints = new double[nspots];
         double[] dists = new double[nspots];
         double[] dneis = new double[nspots];
@@ -169,9 +173,14 @@ public class Oocyte3D
             
             // object volume
             vols[i] = spot.getVolumeUnit();
+            sphericities[i] = spot.getSphericity();
+            surfaces[i] = spot.getAreaUnit();
+            
             summeanint += ints[i];
             sumint += spot.getIntegratedDensity(ihand);
             spotsVolume += vols[i];
+            spotsSurface += surfaces[i];
+            spotsSphericity += sphericities[i];
             // distance to center
             dists[i] = spot.distCenterUnit(contour);
             dist += dists[i];
@@ -181,7 +190,7 @@ public class Oocyte3D
             dneighbor += dneis[i];
             
             // write individual stats
-            tools.writeIndividualSpotStat( ooname, i, dists[i], vols[i], dneis[i], ints[i]);
+            tools.writeIndividualSpotStat( ooname, i, dists[i], vols[i], dneis[i], ints[i], surfaces[i], sphericities[i]);
          }
         
         try
@@ -190,7 +199,7 @@ public class Oocyte3D
             double ooTotInt = contour.getIntegratedDensity(ihand);
             
             tools.writeOocyteStat(ooname, ooVolume, nspots);
-            tools.writeSpotsStat( nspots, vols, spotsVolume, dists, dist, dneis, dneighbor, ints, sumint, summeanint, ooTotInt, ooVolume );
+            tools.writeSpotsStat( nspots, vols, spotsVolume, dists, dist, dneis, dneighbor, ints, sumint, summeanint, ooTotInt, ooVolume, surfaces, spotsSurface, sphericities, spotsSphericity );
             tools.flushDistanceResults();
         }
         catch (Exception e)

@@ -125,11 +125,13 @@ public class Spoty_Distribution implements PlugIn
           ImagePlus img = IJ.openImage(imageDir+filename);
           img.show();
           tools.setImageCalibration(img);
+          IJ.log("Preprocessing image: "+filename+" to find oocytes...");
           ImagePlus med_img = tools.apply_median_filter(img, 4);
           med_img.show();
           tools.close(img);
           tools.apply_threshold(med_img, "Otsu");
           Prefs.blackBackground = true;
+          IJ.log("Get oocytes...");
           IJ.run(med_img, "Dilate", "stack");
           IJ.run(med_img, "Close-", "stack");
           IJ.run(med_img, "Fill Holes", "stack");

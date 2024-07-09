@@ -429,21 +429,23 @@ public class SpotyTools
         outPutResults.write("ImageName\tOocyteVolume(um3)\tNbSpots\t" 
                              +"SpotsVolume_Mean(um3)\tSpotsVolume_SD\tDistance2Center_Mean(um)\tDistance2Center_SD" 
                 + "\tDistance2ClosestSpot_Mean(um)\tDistance2ClosestSpot_SD"
-                +"\tMeanSpotIntensity\tMeanOocyteIntensityWithoutSpots\tNormalizedMeanSpotIntensity"+"\n");
+                +"\tMeanSpotIntensity\tMeanOocyteIntensityWithoutSpots\tNormalizedMeanSpotIntensity"
+                +"\tSpotsSurfaceArea_Mean(um2)\tSpotsSurfaceArea_SD\tSpotsSphericity_Mean\tSpotsSphericity_SD\n");
         outPutResults.flush();
         
         // indivs results
         FileWriter fileDistances = new FileWriter(outDirResults +"Results_SpotsDistances.xls", false);
         outPutDistances = new BufferedWriter(fileDistances);
-        outPutDistances.write("ImageName\tSpotIndex\tSpotVolume\tDistanceToCenter\tDistanceToClosestNeighbor\tMeanIntensity\n");
+        outPutDistances.write("ImageName\tSpotIndex\tSpotVolume\tDistanceToCenter\tDistanceToClosestNeighbor\tMeanIntensity\tSpotSurfaceArea\tSpotSphericity\n");
         outPutDistances.flush();
         
     }
     
-    public void writeIndividualSpotStat(String imgname, int ind, double distance, double volume, double dist2neighbor, double meanint)
+    public void writeIndividualSpotStat(String imgname, int ind, double distance, double volume, double dist2neighbor, double meanint, double surface, double sphericity)
     {
         try {
-            outPutDistances.write(imgname+"\t"+ind+"\t"+volume+"\t"+distance+"\t"+dist2neighbor+"\t"+meanint+"\n");
+            imgname = imgname.replace(" ", "_");
+            outPutDistances.write(imgname+"\t"+ind+"\t"+volume+"\t"+distance+"\t"+dist2neighbor+"\t"+meanint+"\t"+surface+"\t"+sphericity+"\n");
         } catch (IOException ex) {
             Logger.getLogger(SpotyTools.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -451,6 +453,7 @@ public class SpotyTools
     
     public void writeOocyteStat( String imgName, double volume, int nspots ) throws IOException
     {
+        imgName = imgName.replace(" ", "_");
         outPutResults.write(imgName+"\t"+volume+"\t"+nspots);
     }
     
@@ -459,15 +462,21 @@ public class SpotyTools
         outPutDistances.flush(); 
     }
     
-    public void writeSpotsStat(int nspots, double[] vols, double sumvol, double[] distances, double sumdist, double[] dneigh, double sumdneigh, double[] meanints, double sumInt, double sumMeanInt, double ooTotInt, double ooVolume ) throws IOException 
+    public void writeSpotsStat(int nspots, double[] vols, double sumvol, double[] distances, double sumdist, double[] dneigh, double sumdneigh, double[] meanints, double sumInt, double sumMeanInt, double ooTotInt, double ooVolume, double[] surfaces, double surfaceTot, double[] sphericities, double sphericityTot ) throws IOException 
     {
         double ooint = ooTotInt - sumInt;   // intensity excluding spots
         double ooVol = ooVolume - sumvol;  // volume excluding spots
         //System.out.println(ooVolume+" "+ooTotInt+" "+ooint+" "+sumInt+" "+sumvol);
         double meanSpotIntensity = sumMeanInt/nspots;
         double meanOoIntensity = ooint/ooVol;
+        double meanSpotSurface = surfaceTot/nspots;
+        double meanSpotSphericity = sphericityTot/nspots;
         outPutResults.write("\t"+(sumvol/nspots)+"\t"+getSD(vols, sumvol/nspots)+"\t"+(sumdist/nspots)+"\t"+getSD(distances, sumdist/nspots)
-                + "\t"+(sumdneigh/nspots)+"\t"+getSD(dneigh, sumdneigh/nspots)+"\t"+meanSpotIntensity+"\t"+meanOoIntensity+"\t"+meanSpotIntensity/meanOoIntensity+"\n");      
+                + "\t"+(sumdneigh/nspots)+"\t"+getSD(dneigh, sumdneigh/nspots)+"\t"+meanSpotIntensity+"\t"+meanOoIntensity+"\t"
+                +meanSpotIntensity/meanOoIntensity+"\t"
+                +meanSpotSurface+"\t"+getSD(surfaces, meanSpotSurface)+"\t"
+                +meanSpotSphericity+"\t"+getSD(sphericities, meanSpotSphericity)
+                        +"\n");      
         outPutResults.flush();
     }
     
