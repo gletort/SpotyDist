@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId> DSCB </groupId>
 	<artifactId>Spoty_Dist</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
         <packaging>jar</packaging>
 	<name>Spoty_Dist</name>
 	<description>Analyze distribution of stained dots

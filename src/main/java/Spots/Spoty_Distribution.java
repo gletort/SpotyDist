@@ -126,7 +126,9 @@ public class Spoty_Distribution implements PlugIn
           img.show();
           tools.setImageCalibration(img);
           IJ.log("Preprocessing image: "+filename+" to find oocytes...");
-          ImagePlus med_img = tools.apply_median_filter(img, 4);
+          //ImagePlus med_img = tools.apply_median_filter(img, 4);
+          ImagePlus med_img = img.duplicate();
+          IJ.run(med_img, "Gaussian Blur 3D...", "x=3 y=3 z=2");
           med_img.show();
           tools.close(img);
           tools.apply_threshold(med_img, "Otsu");
